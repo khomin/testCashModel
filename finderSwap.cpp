@@ -1,0 +1,6 @@
+#include "finderSwap.h"
+
+std::map<uint64_t, BlockItem> finderSwap::findRange(const std::pair<uint64_t,uint64_t> & range) {
+    std::map<uint64_t, BlockItem> res;
+    return res;
+}
