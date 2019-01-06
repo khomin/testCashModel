@@ -7,14 +7,19 @@ CommandParser::CommandParser() {
 }
 
 void CommandParser::execute() {
-    while(cin >> command) {
-        cout << "command input: " << command<< std::endl;
+    while(1) {
+        std::getline(cin, command);
 
         if(commandItem.setCommand(command)) {
+            cout << "command input: " << command<< std::endl;
+
             commandItem.setOutResultStream(&std::cout);
+
             queueLock.lock();
             queue.push(commandItem);
             queueLock.unlock();
+        } else {
+            cout << "ivalid input: " << command<< std::endl;
         }
         commandItem.flush();
     }

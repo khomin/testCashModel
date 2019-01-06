@@ -16,13 +16,15 @@ public:
         bool isAllNormal;
     }sFindResult;
 
+    void loadCashFromResource(std::string path);
     sFindResult getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
     sFindResult getRangeFromSwap(const std::pair<uint64_t,uint64_t> & range);
     std::vector<uint64_t>& getNotFoundItems();
     std::map<uint64_t, BlockItem> getFindResult();
+
 private:
-    finderCash cash;
-    finderSwap swap;
+    finderCash cashFind;
+    finderSwap swapFind;
     std::map<uint64_t, BlockItem> findResult;
     std::vector<uint64_t> notFoundItems;
 };

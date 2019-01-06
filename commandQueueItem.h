@@ -19,6 +19,7 @@ private:
     bool isValid;
     std::ostream* outStream;
     std::pair<uint64_t, uint64_t> findRange;
+    const char* commandTemplate = "get -i %i,%i";
 };
 
 

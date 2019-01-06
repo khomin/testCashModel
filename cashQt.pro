@@ -22,7 +22,8 @@ SOURCES += \
     finder.cpp \
     blockitem.cpp \
     finderSwap.cpp \
-    finderCash.cpp
+    finderCash.cpp \
+    parceResourceCash.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -36,4 +37,5 @@ HEADERS += \
     finder.h \
     blockitem.h \
     finderCash.h \
-    finderSwap.h
+    finderSwap.h \
+    parceResourceCash.h

@@ -6,7 +6,17 @@ CommandQueueItem::CommandQueueItem () {
 }
 
 bool CommandQueueItem::setCommand(std::string &command)  {
-    isValid = true;
+    isValid = false;
+    uint64_t rangeFirst = 0;
+    uint64_t rangeSecond = 0;
+    int len = std::sscanf(command.c_str(),
+                          commandTemplate,
+                          &rangeFirst, &rangeSecond);
+    if(len == 2) {
+        findRange.first = rangeFirst;
+        findRange.second = rangeSecond;
+        isValid = true;
+    }
     return isValid;
 }
 

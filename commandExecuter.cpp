@@ -3,12 +3,17 @@
 void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                               std::mutex* lock) {
     Finder finder;
+    finder.loadCashFromResource("/media/khomin/D/PROJECTs/Qt/cashQt/log.csv");
+
     for(;;) {
+
         if(lock->try_lock()) {
             std::this_thread::sleep_for(std::chrono::microseconds(100));
+
             if(!commandQueue->empty()) {
                 auto outStreamRes = commandQueue->front().getOutStreamToResult();
                 auto find = finder.getRangeFromCash(commandQueue->front().getFindRange());
+
                 if(find.isAllNormal) {
                     printfResult(outStreamRes, find);
                 } else {

@@ -1,16 +1,24 @@
 #include "finder.h"
+#include "parceResourceCash.h"
+
+void Finder::loadCashFromResource(std::string path) {
+    ParceResourceCash parceResourceCash(path);
+    auto values = parceResourceCash.getList();
+    cashFind.insertCashValues(values);
+}
 
 Finder::sFindResult Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> & range) {
     sFindResult res;
     // первым делом
     // поиск в cash
-    auto find = cash.findRange(range);
+    auto find = cashFind.findRange(range);
     uint64_t curItem = range.first;
     while(curItem != range.second) {
         auto i = find.find(curItem);
         if(i == find.end()) {
             notFoundItems.push_back(curItem);
         }
+        curItem++;
     }
     notFoundItems.empty() ? res.isAllNormal = true : res.isAllNormal = false;
     res.findResult = find;
@@ -24,7 +32,7 @@ Finder::sFindResult Finder::getRangeFromSwap(const std::pair<uint64_t,uint64_t> 
     // если не пуст, тогда начинаем
     if(!notFoundItems.empty()) {
         // получаем map из swap
-        auto tfind = swap.findRange(range);
+        auto tfind = swapFind.findRange(range);
         // склеиваем findResult с tfind
         // т.е смотрим в списке, notFoundItems (что не нашли в  cash)
         // потом ищем конкретный элемент в результате swap
