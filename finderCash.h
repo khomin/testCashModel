@@ -10,11 +10,11 @@
 
 class finderCash{
 public:
-    std::map<uint64_t, BlockItem> findRange(const std::pair<uint64_t,uint64_t> & range);
-    void insertCashValues(std::map<uint64_t, BlockItem>);
+    std::map<uint64_t, std::shared_ptr<BlockItem>> findRange(const std::pair<uint64_t,uint64_t> & range);
+    void insertCashValues(std::map<uint64_t, std::shared_ptr<BlockItem>> range);
 
 private:
-    std::map<uint64_t, BlockItem> cashValues;
+    std::map<uint64_t, std::shared_ptr<BlockItem>> cashValues;
 };
 
 #endif // CASH_H

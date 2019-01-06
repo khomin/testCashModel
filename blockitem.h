@@ -10,6 +10,7 @@
 class BlockItem {
 public:
     BlockItem();
+    BlockItem(const BlockItem& b);
     int getItemsCount();
     std::pair<uint64_t,uint64_t> timeInterval; //Интервал времени
     std::list<std::pair<uint64_t, float>> chrArray; // Набор архивных значений, выбранных из архива за данный интервал.

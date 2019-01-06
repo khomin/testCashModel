@@ -1,5 +1,6 @@
 #include "parceResourceCash.h"
 #include <fstream>
+#include <memory>
 
 ParceResourceCash::ParceResourceCash(std::string path) {
     loadResource(path);
@@ -59,7 +60,7 @@ void ParceResourceCash::buildBlockList(std::vector<std::pair<uint64_t,float>> & 
             // если в блок больше не помещается элемент
             if(block->getItemsCount() > maximumElementInBlock) {
                 // тогда заканчиваем его
-                list.insert(std::pair<uint64_t, BlockItem>(block->timeInterval.first, *block.get()));
+                list.insert(std::pair<uint64_t, std::shared_ptr<BlockItem>>(block->timeInterval.first, block));
                 // и создаем следующий
                 block = std::make_shared<BlockItem>();
             }
@@ -67,7 +68,7 @@ void ParceResourceCash::buildBlockList(std::vector<std::pair<uint64_t,float>> & 
         // если не вставили последний (по > maximumElementInBlock)
         // тогда добавляем здесь
         if(block->getItemsCount() != 0) {
-            list.insert(std::pair<uint64_t, BlockItem>(block->timeInterval.first, *block.get()));
+            list.insert(std::pair<uint64_t, std::shared_ptr<BlockItem>>(block->timeInterval.first, block));
         }
     }
 }
@@ -83,6 +84,6 @@ std::pair<uint64_t,float> ParceResourceCash::getRecordData(std::string lineRecor
     return res;
 }
 
-std::map<uint64_t,BlockItem> ParceResourceCash::getLists() {
+std::map<uint64_t,std::shared_ptr<BlockItem>> ParceResourceCash::getLists() {
     return list;
 }

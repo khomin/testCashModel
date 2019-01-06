@@ -21,7 +21,6 @@ SOURCES += \
     commandQueueItem.cpp \
     finder.cpp \
     blockitem.cpp \
-    finderSwap.cpp \
     finderCash.cpp \
     parceResourceCash.cpp
 
@@ -37,5 +36,4 @@ HEADERS += \
     finder.h \
     blockitem.h \
     finderCash.h \
-    finderSwap.h \
     parceResourceCash.h

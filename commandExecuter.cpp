@@ -37,9 +37,9 @@ void CommandExecuter::printfResultImediately(std::ostream* outStreamRes, const F
         if(!finderResult.findResult.empty()) {
             (*outStreamRes) << "find totalElements=" << finderResult.findResult.size() << "\n";
             (*outStreamRes) << "noFound pointers: total="
-                            << finderResult.findResult.begin()->second.timeInterval.first << ", "
+                            << finderResult.findResult.begin()->second.get()->timeInterval.first << ", "
                             << "end="
-                            << finderResult.findResult.begin()->second.timeInterval.second << "]"<< "\n";
+                            << finderResult.findResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
         }
     }
 }
@@ -51,9 +51,9 @@ void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes, const Fi
         if(!finderResult.findResult.empty()) {
             (*outStreamRes) << "find total blocks=" << finderResult.findResult.size() << "\n";
             (*outStreamRes) << "pointers: "
-                            << finderResult.findResult.begin()->second.timeInterval.first << ", "
+                            << finderResult.findResult.begin()->second.get()->timeInterval.first << ", "
                             << "end="
-                            << finderResult.findResult.rbegin()->second.timeInterval.second << "]"<< "\n";
+                            << finderResult.findResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
         }
     }
 }

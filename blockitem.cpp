@@ -6,6 +6,12 @@ BlockItem::BlockItem() {
     lastUsageTimestamp = 0;
 }
 
+BlockItem::BlockItem(const BlockItem & b) {
+    this->timeInterval = b.timeInterval;
+    this->chrArray = b.chrArray;
+    this->lastUsageTimestamp = b.lastUsageTimestamp;
+}
+
 int BlockItem::getItemsCount() {
     return chrArray.size();
 }
