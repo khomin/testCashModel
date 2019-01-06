@@ -49,11 +49,11 @@ void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes, const Fi
         (*outStreamRes) << "Pending :" << std::endl;
         (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found in cash" : "found with swap") << std::endl;
         if(!finderResult.findResult.empty()) {
-            (*outStreamRes) << "find totalElements=" << finderResult.findResult.size() << "\n";
-            (*outStreamRes) << "noFound pointers: total="
+            (*outStreamRes) << "find total blocks=" << finderResult.findResult.size() << "\n";
+            (*outStreamRes) << "pointers: "
                             << finderResult.findResult.begin()->second.timeInterval.first << ", "
                             << "end="
-                            << finderResult.findResult.begin()->second.timeInterval.second << "]"<< "\n";
+                            << finderResult.findResult.rbegin()->second.timeInterval.second << "]"<< "\n";
         }
     }
 }

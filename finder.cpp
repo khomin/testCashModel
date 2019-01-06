@@ -6,6 +6,7 @@ Finder::sFindResult Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> 
     // первым делом
     // поиск в cash
     auto find = cashFind.findRange(range);
+    //
     for(uint64_t curItem = range.first; curItem!=range.second; curItem++) {
         auto i = find.find(curItem);
         if(i == find.end()) {
@@ -21,7 +22,13 @@ Finder::sFindResult Finder::getRangeFromSwap(const std::pair<uint64_t,uint64_t> 
     sFindResult res;
     // заполняем кэш из файла
     ParceResourceCash parceResourceCash("/media/khomin/D/PROJECTs/Qt/cashQt/log.csv");
-    auto find = parceResourceCash.getList();
+    auto find = parceResourceCash.getLists();
+    // теперь нужно проверить
+    // поместится ли все данные в один блок
+    // если нет, тогда разбить на сколько нужно
+    res.findResult = find;
+
+    // возврат результат
     notFoundItems.empty() ? res.isAllNormal = true : res.isAllNormal = false;
     res.findResult = find;
     return res;
