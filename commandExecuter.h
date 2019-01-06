@@ -12,7 +12,8 @@ class CommandExecuter {
 public:
     static void handler(std::queue<CommandQueueItem>* commandQueue,
                         std::mutex* lock);
-    static void printfResult(std::ostream* outStreamRes, Finder::sFindResult & finderResult);
+    static void printfResultImediately(std::ostream* outStreamRes, const Finder::sFindResult & finderResult);
+    static void printfResultAfterSwap(std::ostream* outStreamRes, const Finder::sFindResult & finderResult);
 };
 
 #endif // COMMANDEXECUTER_H

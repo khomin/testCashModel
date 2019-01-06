@@ -3,22 +3,26 @@
 void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                               std::mutex* lock) {
     Finder finder;
-    finder.loadCashFromResource("/media/khomin/D/PROJECTs/Qt/cashQt/log.csv");
-
     for(;;) {
 
         if(lock->try_lock()) {
             std::this_thread::sleep_for(std::chrono::microseconds(100));
 
             if(!commandQueue->empty()) {
+                // получаем указатель на поток вывода логов
                 auto outStreamRes = commandQueue->front().getOutStreamToResult();
-                auto find = finder.getRangeFromCash(commandQueue->front().getFindRange());
+                // читаем из кэша
+                auto res = finder.getRangeFromCash(commandQueue->front().getFindRange());
 
-                if(find.isAllNormal) {
-                    printfResult(outStreamRes, find);
-                } else {
-                    auto rangeResult = finder.getRangeFromSwap(commandQueue->front().getFindRange());
-                    printfResult(outStreamRes, rangeResult);
+                // если сразу все нашли, ок
+                if(res.isAllNormal) {
+                    printfResultImediately(outStreamRes, res);
+                } else { // иначе читаем из swap
+                    res = finder.getRangeFromSwap(commandQueue->front().getFindRange());
+                    // объядиняем с cash
+                    finder.mergeFinderResultWithCash(res);
+                    // выводим
+                    printfResultAfterSwap(outStreamRes, res);
                 }
                 commandQueue->pop();
             }
@@ -27,9 +31,23 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
     }
 }
 
-void CommandExecuter::printfResult(std::ostream* outStreamRes, Finder::sFindResult & finderResult) {
+void CommandExecuter::printfResultImediately(std::ostream* outStreamRes, const Finder::sFindResult & finderResult) {
     if(outStreamRes != nullptr) {
-        (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found" : "found bit") << std::endl;
+        (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found" : "found with swap") << std::endl;
+        if(!finderResult.findResult.empty()) {
+            (*outStreamRes) << "find totalElements=" << finderResult.findResult.size() << "\n";
+            (*outStreamRes) << "noFound pointers: total="
+                            << finderResult.findResult.begin()->second.timeInterval.first << ", "
+                            << "end="
+                            << finderResult.findResult.begin()->second.timeInterval.second << "]"<< "\n";
+        }
+    }
+}
+
+void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes, const Finder::sFindResult & finderResult) {
+    if(outStreamRes != nullptr) {
+        (*outStreamRes) << "Pending :" << std::endl;
+        (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found in cash" : "found with swap") << std::endl;
         if(!finderResult.findResult.empty()) {
             (*outStreamRes) << "find totalElements=" << finderResult.findResult.size() << "\n";
             (*outStreamRes) << "noFound pointers: total="

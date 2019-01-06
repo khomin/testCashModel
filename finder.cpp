@@ -1,24 +1,16 @@
 #include "finder.h"
 #include "parceResourceCash.h"
 
-void Finder::loadCashFromResource(std::string path) {
-    ParceResourceCash parceResourceCash(path);
-    auto values = parceResourceCash.getList();
-    cashFind.insertCashValues(values);
-}
-
 Finder::sFindResult Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> & range) {
     sFindResult res;
     // первым делом
     // поиск в cash
     auto find = cashFind.findRange(range);
-    uint64_t curItem = range.first;
-    while(curItem != range.second) {
+    for(uint64_t curItem = range.first; curItem!=range.second; curItem++) {
         auto i = find.find(curItem);
         if(i == find.end()) {
             notFoundItems.push_back(curItem);
         }
-        curItem++;
     }
     notFoundItems.empty() ? res.isAllNormal = true : res.isAllNormal = false;
     res.findResult = find;
@@ -27,36 +19,34 @@ Finder::sFindResult Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> 
 
 Finder::sFindResult Finder::getRangeFromSwap(const std::pair<uint64_t,uint64_t> & range) {
     sFindResult res;
-    // в notFoundItems то, что хотели найти но не нашли в cash
-    // значит надо искать в swap
-    // если не пуст, тогда начинаем
-    if(!notFoundItems.empty()) {
-        // получаем map из swap
-        auto tfind = swapFind.findRange(range);
-        // склеиваем findResult с tfind
-        // т.е смотрим в списке, notFoundItems (что не нашли в  cash)
-        // потом ищем конкретный элемент в результате swap
-        // если найден, добавить в основной результат и удалить из notFoundItems
-        for(auto it=notFoundItems.begin(); it!=notFoundItems.end(); it++) {
-            auto i = tfind.find(*it);
-            if(i != tfind.end()) {
-                findResult.insert(std::pair<uint64_t, BlockItem>((*i).first, (*i).second));
-            }
-        }
-        // удаляем из списка notFoundItem, т.к. их нашли
+    // заполняем кэш из файла
+    ParceResourceCash parceResourceCash("/media/khomin/D/PROJECTs/Qt/cashQt/log.csv");
+    auto find = parceResourceCash.getList();
+    notFoundItems.empty() ? res.isAllNormal = true : res.isAllNormal = false;
+    res.findResult = find;
+    return res;
+}
 
-        for(auto nofountIt=notFoundItems.begin(); nofountIt!=notFoundItems.end(); nofountIt++) {
-            auto res = findResult.find(*nofountIt);
-            if(res != findResult.end()) {
-                notFoundItems.erase(nofountIt);
-                nofountIt = notFoundItems.begin();
-            }
+void Finder::mergeFinderResultWithCash(Finder::sFindResult & res) {
+    // склеиваем
+    cashFind.insertCashValues(res.findResult);
+    // далее смотрим в списке, notFoundItems (что не нашли в  cash)
+    // потом ищем конкретный элемент в результате swap
+    // если найден, добавить в основной результат и удалить из notFoundItems
+    for(auto it=notFoundItems.begin(); it!=notFoundItems.end(); it++) {
+        auto i = res.findResult.find(*it);
+        if(i != res.findResult.end()) {
+             findResult.insert(std::pair<uint64_t, BlockItem>((*i).first, (*i).second));
         }
     }
-
-    notFoundItems.empty() ? res.isAllNormal = true : res.isAllNormal = false;
-    res.findResult = findResult;
-    return res;
+    // удаляем из списка notFoundItem, т.к. их нашли
+    for(auto nofountIt=notFoundItems.begin(); nofountIt!=notFoundItems.end(); nofountIt++) {
+        auto res = findResult.find(*nofountIt);
+        if(res != findResult.end()) {
+            notFoundItems.erase(nofountIt);
+            nofountIt = notFoundItems.begin();
+        }
+    }
 }
 
 std::map<uint64_t, BlockItem> Finder::getFindResult() {
