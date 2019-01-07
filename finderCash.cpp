@@ -15,7 +15,6 @@ FinderData::sFindResult FinderCash::findRange(const std::pair<uint64_t,uint64_t>
         for(auto tend = cash.rbegin(); tend!=cash.rend(); tend++) {
             if((*tend).second.get()->timeInterval.second <= searchRange.second) {
                 endInterval = (--tend.base());
-                auto endTest = (*endInterval);
                 break;
             }
         }
