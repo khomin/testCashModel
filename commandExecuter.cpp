@@ -5,8 +5,6 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
     while(1) {
 
         if(lock->try_lock()) {
-            std::this_thread::sleep_for(std::chrono::microseconds(100));
-
             if(!commandQueue->empty()) {
                 Finder finder;
                 // получаем указатель на поток вывода логов
@@ -26,6 +24,8 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
             }
             lock->unlock();
         }
+
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
     }
 }
 
