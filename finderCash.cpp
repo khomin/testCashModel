@@ -21,9 +21,6 @@ FinderData::sFindResult FinderCash::findRange(const std::pair<uint64_t,uint64_t>
         }
     }
 
-    auto test = (*endInterval);
-    auto test_2 = (*lowerInterval);
-
     if((lowerInterval != cash.end()) && (endInterval != cash.end())) {
         if((*lowerInterval).second.get()->timeInterval.first > searchRange.first) {
             result.notFoundIntervals.push_back(
