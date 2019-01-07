@@ -2,11 +2,12 @@
 #include <fstream>
 #include <memory>
 
-ParceResourceCash::ParceResourceCash(std::string path) {
-    loadResource(path);
+ParceResourceCash::ParceResourceCash() {
+
 }
 
-bool ParceResourceCash::loadResource(std::string path) {
+bool ParceResourceCash::loadResource(const std::string path,
+                                     const FinderData::NotFoundIntervals & searchIntervals) {
     bool res = false;
     std::ifstream file;
     std::vector<std::pair<uint64_t,float>> dataToCreateBlocks;
@@ -25,8 +26,13 @@ bool ParceResourceCash::loadResource(std::string path) {
                 // после выхода из цикла разбора файла
                 // из него создаются блоки
                 auto data = getRecordData(value);
-                if(data.first != 0) {
-                    dataToCreateBlocks.push_back(data);
+                // если значение из искомого диапазона
+                // тогда добавляем в результат
+                for(auto intervals: searchIntervals) {
+                    if((data.first >= intervals.first) && (data.first <= intervals.second)) {
+                        dataToCreateBlocks.push_back(data);
+                        break;
+                    }
                 }
             }
         }
@@ -84,6 +90,6 @@ std::pair<uint64_t,float> ParceResourceCash::getRecordData(std::string lineRecor
     return res;
 }
 
-std::map<uint64_t,std::shared_ptr<BlockItem>> ParceResourceCash::getLists() {
+std::map<uint64_t,std::shared_ptr<BlockItem>> ParceResourceCash::getLoadResult() {
     return list;
 }

@@ -2,13 +2,13 @@
 
 void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                               std::mutex* lock) {
-    Finder finder;
-    for(;;) {
+    while(1) {
 
         if(lock->try_lock()) {
             std::this_thread::sleep_for(std::chrono::microseconds(100));
 
             if(!commandQueue->empty()) {
+                Finder finder;
                 // получаем указатель на поток вывода логов
                 auto outStreamRes = commandQueue->front().getOutStreamToResult();
                 // читаем из кэша
@@ -18,9 +18,7 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                 if(res.isAllNormal) {
                     printfResultImediately(outStreamRes, res);
                 } else { // иначе читаем из swap
-                    res = finder.getRangeFromSwap(commandQueue->front().getFindRange());
-                    // объядиняем с cash
-                    finder.mergeFinderResultWithCash(res);
+                    res = finder.getRangeFromSwap(res.notFoundIntervals);
                     // выводим
                     printfResultAfterSwap(outStreamRes, res);
                 }
@@ -31,7 +29,8 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
     }
 }
 
-void CommandExecuter::printfResultImediately(std::ostream* outStreamRes, const Finder::sFindResult & finderResult) {
+void CommandExecuter::printfResultImediately(std::ostream* outStreamRes,
+                                             const FinderData::sFindResult & finderResult) {
     if(outStreamRes != nullptr) {
         (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found" : "found with swap") << std::endl;
         if(!finderResult.findResult.empty()) {
@@ -44,7 +43,8 @@ void CommandExecuter::printfResultImediately(std::ostream* outStreamRes, const F
     }
 }
 
-void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes, const Finder::sFindResult & finderResult) {
+void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes,
+                                            const FinderData::sFindResult & finderResult) {
     if(outStreamRes != nullptr) {
         (*outStreamRes) << "Pending :" << std::endl;
         (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found in cash" : "found with swap") << std::endl;

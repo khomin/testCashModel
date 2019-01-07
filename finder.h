@@ -7,23 +7,18 @@
 #include <mutex>
 #include <blockitem.h>
 #include <finderCash.h>
+#include <finderSwap.h>
+#include "finderData.h"
 
 class Finder {
 public:
-    typedef struct {
-        std::map<uint64_t, std::shared_ptr<BlockItem>> findResult;
-        bool isAllNormal;
-    }sFindResult;
-
-    sFindResult getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
-    sFindResult getRangeFromSwap(const std::pair<uint64_t,uint64_t> & range);
-    std::vector<uint64_t>& getNotFoundItems();
+    FinderData::sFindResult getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
+    FinderData::sFindResult getRangeFromSwap(const FinderData::NotFoundIntervals & intervals);
     std::map<uint64_t, std::shared_ptr<BlockItem>> getFindResult();
-    void mergeFinderResultWithCash(Finder::sFindResult & findResult);
 private:
-    finderCash cashFind;
+    FinderCash cash;
+    FinderSwap swap;
     std::map<uint64_t, std::shared_ptr<BlockItem>> findResult;
-    std::vector<uint64_t> notFoundItems;
 };
 
 #endif // FINDER_H
