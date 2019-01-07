@@ -15,6 +15,7 @@ public:
     FinderData::sFindResult getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
     FinderData::sFindResult getRangeFromSwap(const FinderData::NotFoundIntervals & intervals);
     std::map<uint64_t, std::shared_ptr<BlockItem>> getFindResult();
+    void updateCash(FinderData::sFindResult & updateValues);
 private:
     FinderCash cash;
     FinderSwap swap;

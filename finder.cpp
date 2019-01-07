@@ -13,3 +13,7 @@ FinderData::sFindResult Finder::getRangeFromSwap(const FinderData::NotFoundInter
 std::map<uint64_t, std::shared_ptr<BlockItem>> Finder::getFindResult() {
     return findResult;
 }
+
+void Finder::updateCash(FinderData::sFindResult & updateValues) {
+    cash.insertCashValues(updateValues.findResult);
+}

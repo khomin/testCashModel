@@ -2,21 +2,29 @@
 
 void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                               std::mutex* lock) {
+    Finder finder;
+
     while(1) {
 
         if(lock->try_lock()) {
             if(!commandQueue->empty()) {
-                Finder finder;
                 // получаем указатель на поток вывода логов
                 auto outStreamRes = commandQueue->front().getOutStreamToResult();
+
                 // читаем из кэша
                 auto res = finder.getRangeFromCash(commandQueue->front().getFindRange());
 
                 // если сразу все нашли, ок
                 if(res.isAllNormal) {
                     printfResultImediately(outStreamRes, res);
-                } else { // иначе читаем из swap
+                } else {
+
+                    // иначе читаем из swap
                     res = finder.getRangeFromSwap(res.notFoundIntervals);
+
+                    // обновляем кэш
+                    finder.updateCash(res);
+
                     // выводим
                     printfResultAfterSwap(outStreamRes, res);
                 }
