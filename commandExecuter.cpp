@@ -1,4 +1,5 @@
 #include "commandExecuter.h"
+#include <algorithm>
 
 void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                               std::mutex* lock) {
@@ -44,10 +45,16 @@ void CommandExecuter::printfResultImediately(std::ostream* outStreamRes,
         (*outStreamRes) << "handler: " << "all found" << std::endl;
         if(!finderResult.empty()) {
             (*outStreamRes) << "find totalElements=" << finderResult.size() << "\n";
-            (*outStreamRes) << "noFound pointers: total="
+            (*outStreamRes) << "pointers: total="
                             << finderResult.begin()->second.get()->timeInterval.first << ", "
                             << "end="
                             << finderResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
+            (*outStreamRes) << "values: " << "\n";
+            std::for_each(finderResult.begin(), finderResult.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
+                for(auto i: block.second.get()->chrArray) {
+                    (*outStreamRes) << "data=" << i.first << " value=" << i.second << std::endl;
+                }
+            });
         }
     }
 }
@@ -63,6 +70,11 @@ void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes,
                             << finderResult.begin()->second.get()->timeInterval.first << ", "
                             << "end="
                             << finderResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
+            std::for_each(finderResult.begin(), finderResult.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
+                for(auto i: block.second.get()->chrArray) {
+                    (*outStreamRes) << "data=" << i.first << " value=" << i.second << std::endl;
+                }
+            });
         }
     }
 }
