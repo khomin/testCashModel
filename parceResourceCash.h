@@ -13,10 +13,12 @@ public:
     bool loadResource(const std::string path,
                       const FinderData::NotFoundIntervals & searchIntervals);
     std::map<uint64_t,std::shared_ptr<BlockItem>> getLoadResult();
+    void clearLastRes();
 private:
+    std::pair<uint64_t,float> getRecordData(std::string lineRecord);
+
     const int maximumElementInBlock = 5;
     void buildBlockList(std::vector<std::pair<uint64_t,float>> & dataToCreateBlocks);
-    std::pair<uint64_t,float> getRecordData(std::string lineRecord);
     std::map<uint64_t,std::shared_ptr<BlockItem>> list;
 };
 

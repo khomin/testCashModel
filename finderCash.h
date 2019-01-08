@@ -11,11 +11,13 @@
 
 class FinderCash{
 public:
-    FinderData::sFindResult findRange (const std::pair<uint64_t,uint64_t> & searchRange);
+    FinderData::findResult findRange (const std::pair<uint64_t,uint64_t> & searchRange);
+    FinderData::NotFoundIntervals getLastNotFoundIntervals();
     void insertCashValues(std::map<uint64_t, std::shared_ptr<BlockItem>> searchRange);
 
 private:
     std::map<uint64_t, std::shared_ptr<BlockItem>> cash;
+    FinderData::NotFoundIntervals notFoundIntervals;
 };
 
 #endif // CASH_H

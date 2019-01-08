@@ -13,14 +13,15 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
 
                 // читаем из кэша
                 auto res = finder.getRangeFromCash(commandQueue->front().getFindRange());
+                auto notFoundCash = finder.getLastNotFoundIntervalsCash();
 
                 // если сразу все нашли, ок
-                if(res.isAllNormal) {
+                if(notFoundCash.empty()) {
                     printfResultImediately(outStreamRes, res);
                 } else {
 
                     // иначе читаем из swap
-                    res = finder.getRangeFromSwap(res.notFoundIntervals);
+                    res = finder.getRangeFromSwap(notFoundCash);
 
                     // обновляем кэш
                     finder.updateCash(res);
@@ -38,30 +39,30 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
 }
 
 void CommandExecuter::printfResultImediately(std::ostream* outStreamRes,
-                                             const FinderData::sFindResult & finderResult) {
+                                             const FinderData::findResult & finderResult) {
     if(outStreamRes != nullptr) {
-        (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found" : "found with swap") << std::endl;
-        if(!finderResult.findResult.empty()) {
-            (*outStreamRes) << "find totalElements=" << finderResult.findResult.size() << "\n";
+        (*outStreamRes) << "handler: " << "all found" << std::endl;
+        if(!finderResult.empty()) {
+            (*outStreamRes) << "find totalElements=" << finderResult.size() << "\n";
             (*outStreamRes) << "noFound pointers: total="
-                            << finderResult.findResult.begin()->second.get()->timeInterval.first << ", "
+                            << finderResult.begin()->second.get()->timeInterval.first << ", "
                             << "end="
-                            << finderResult.findResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
+                            << finderResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
         }
     }
 }
 
 void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes,
-                                            const FinderData::sFindResult & finderResult) {
+                                            const FinderData::findResult & finderResult) {
     if(outStreamRes != nullptr) {
         (*outStreamRes) << "Pending :" << std::endl;
-        (*outStreamRes) << "handler: " << (finderResult.isAllNormal ? "all found in cash" : "found with swap") << std::endl;
-        if(!finderResult.findResult.empty()) {
-            (*outStreamRes) << "find total blocks=" << finderResult.findResult.size() << "\n";
+        (*outStreamRes) << "handler: " << "found with swap" << std::endl;
+        if(!finderResult.empty()) {
+            (*outStreamRes) << "find total blocks=" << finderResult.size() << "\n";
             (*outStreamRes) << "pointers: "
-                            << finderResult.findResult.begin()->second.get()->timeInterval.first << ", "
+                            << finderResult.begin()->second.get()->timeInterval.first << ", "
                             << "end="
-                            << finderResult.findResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
+                            << finderResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
         }
     }
 }

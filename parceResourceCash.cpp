@@ -93,3 +93,7 @@ std::pair<uint64_t,float> ParceResourceCash::getRecordData(std::string lineRecor
 std::map<uint64_t,std::shared_ptr<BlockItem>> ParceResourceCash::getLoadResult() {
     return list;
 }
+
+void ParceResourceCash::clearLastRes() {
+    list.clear();
+}

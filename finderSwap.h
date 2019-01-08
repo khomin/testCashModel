@@ -12,8 +12,7 @@
 
 class FinderSwap{
 public:
-
-    FinderData::sFindResult findRange(const FinderData::NotFoundIntervals & intervals);
+    FinderData::findResult findRange(const FinderData::NotFoundIntervals & intervals);
 };
 
 #endif // SWAP_H
