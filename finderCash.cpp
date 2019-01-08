@@ -33,8 +33,13 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
                         std::pair<uint64_t,uint64_t>((*endInterval).second.get()->timeInterval.second, searchRange.second));
         }
         // копируем найденное в возврат
-        resMap.insert(lowerInterval, endInterval);
-
+        // если только один элемент найден, инсерт не может вставить с двумя одинаковыми итераторами
+        // вставка по ключу
+        if(lowerInterval == endInterval) {
+            resMap[(*lowerInterval).first] = (*endInterval).second;
+        } else {
+            resMap.insert(lowerInterval, endInterval);
+        }
     } else {
         notFoundIntervals.push_back(
                     std::pair<uint64_t,uint64_t>(searchRange.first, searchRange.second));
