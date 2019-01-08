@@ -6,9 +6,9 @@ void FinderCash::insertCashValues(
 }
 
 FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> & searchRange) {
+    FinderData::findResult resMap;
     auto lowerInterval = cash.lower_bound(searchRange.first);
     auto endInterval = cash.upper_bound(searchRange.second);
-    FinderData::findResult resMap;
 
     notFoundIntervals.clear();
 
