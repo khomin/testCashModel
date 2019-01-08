@@ -24,10 +24,8 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                     // иначе читаем из swap
                     auto resAdvanced = finder.getRangeFromSwap(notFoundCash);
 
-                    res.insert(resAdvanced.begin(), resAdvanced.end());
-
                     // обновляем кэш
-                    finder.updateCash(res);
+                    finder.mergeResultUpdateCash(res, resAdvanced);
 
                     // выводим
                     printfResultAfterSwap(outStreamRes, res);
@@ -42,40 +40,36 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
 }
 
 void CommandExecuter::printfResultImediately(std::ostream* outStreamRes,
-                                             const FinderData::findResult & finderResult) {
+                                             const FinderData::resultCashValues & finderResult) {
     if(outStreamRes != nullptr) {
         (*outStreamRes) << "handler: " << "all found" << std::endl;
         if(!finderResult.empty()) {
             (*outStreamRes) << "find totalElements=" << finderResult.size() << "\n";
             (*outStreamRes) << "pointers: total="
-                            << finderResult.begin()->second.get()->timeInterval.first << ", "
+                            << finderResult.begin()->first << ", "
                             << "end="
-                            << finderResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
+                            << finderResult.rbegin()->second << "]"<< "\n";
             (*outStreamRes) << "values: " << "\n";
-            std::for_each(finderResult.begin(), finderResult.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
-                for(auto i: block.second.get()->chrArray) {
-                    (*outStreamRes) << "data=" << i.first << " value=" << i.second << std::endl;
-                }
+            std::for_each(finderResult.begin(), finderResult.end(), [&](std::pair<const uint64_t, const float> value) {
+                (*outStreamRes) << "date=" << value.first << " value=" << value.second << std::endl;
             });
         }
     }
 }
 
 void CommandExecuter::printfResultAfterSwap(std::ostream* outStreamRes,
-                                            const FinderData::findResult & finderResult) {
+                                            const FinderData::resultCashValues & finderResult) {
     if(outStreamRes != nullptr) {
         (*outStreamRes) << "Pending :" << std::endl;
         (*outStreamRes) << "handler: " << "found with swap" << std::endl;
         if(!finderResult.empty()) {
             (*outStreamRes) << "find total blocks=" << finderResult.size() << "\n";
             (*outStreamRes) << "pointers: "
-                            << finderResult.begin()->second.get()->timeInterval.first << ", "
+                            << finderResult.begin()->second << ", "
                             << "end="
-                            << finderResult.rbegin()->second.get()->timeInterval.second << "]"<< "\n";
-            std::for_each(finderResult.begin(), finderResult.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
-                for(auto i: block.second.get()->chrArray) {
-                    (*outStreamRes) << "data=" << i.first << " value=" << i.second << std::endl;
-                }
+                            << finderResult.rbegin()->second << "]" << "\n";
+            std::for_each(finderResult.begin(), finderResult.end(), [&](std::pair<const uint64_t, const float> value) {
+                (*outStreamRes) << "date=" << value.first << " value=" << value.second << std::endl;
             });
         }
     }

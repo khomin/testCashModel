@@ -13,9 +13,9 @@ public:
     static void handler(std::queue<CommandQueueItem>* commandQueue,
                         std::mutex* lock);
     static void printfResultImediately(std::ostream* outStreamRes,
-                                       const FinderData::findResult & finderResult);
+                                       const FinderData::resultCashValues & finderResult);
     static void printfResultAfterSwap(std::ostream* outStreamRes,
-                                      const FinderData::findResult & finderResult);
+                                      const FinderData::resultCashValues & finderResult);
 };
 
 #endif // COMMANDEXECUTER_H

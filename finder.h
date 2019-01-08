@@ -12,13 +12,16 @@
 
 class Finder {
 public:
-    FinderData::findResult getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
+    FinderData::resultCashValues getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
     FinderData::NotFoundIntervals getLastNotFoundIntervalsCash();
+    FinderData::resultCashValues mergeResultUpdateCash(FinderData::resultCashValues & result,
+                                                       const FinderData::findResult & update);
 
     FinderData::findResult getRangeFromSwap(const FinderData::NotFoundIntervals & intervals);
 
     std::map<uint64_t, std::shared_ptr<BlockItem>> getFindResult();
-    void updateCash(FinderData::findResult & updateValues);
+
+
 private:
     FinderCash cash;
     FinderSwap swap;

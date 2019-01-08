@@ -1,7 +1,20 @@
 #include "finder.h"
+#include <algorithm>
 
-FinderData::findResult Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> & range) {
-    auto res = cash.findRange(range);
+FinderData::resultCashValues Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> & range) {
+    FinderData::resultCashValues res;
+    cash.clearLastNotFound();
+    // сдесь берем целые блоки
+    // надо забрать из них только нужные записи
+    auto findCashResult = cash.findRange(range);
+
+    std::for_each(findCashResult.begin(), findCashResult.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
+        for(auto tvalue: block.second.get()->chrArray) {
+            if(tvalue.first >= range.first && tvalue.first <= range.second) {
+                res.insert(std::pair<uint64_t, float> (tvalue.first, tvalue.second));
+            }
+        }
+    });
     return res;
 }
 
@@ -18,6 +31,13 @@ std::map<uint64_t, std::shared_ptr<BlockItem>> Finder::getFindResult() {
     return findResult;
 }
 
-void Finder::updateCash(FinderData::findResult & updateValues) {
-    cash.insertCashValues(updateValues);
+FinderData::resultCashValues Finder::mergeResultUpdateCash(FinderData::resultCashValues & result,
+                                                           const FinderData::findResult & update) {
+    cash.insertCashValues(update);
+    std::for_each(update.begin(), update.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
+        for(auto tvalue: block.second.get()->chrArray) {
+            result.insert(std::pair<uint64_t, float> (tvalue.first, tvalue.second));
+        }
+    });
+    return result;
 }

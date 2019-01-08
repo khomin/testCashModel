@@ -12,7 +12,7 @@ public:
 
     typedef std::vector<std::pair<uint64_t,uint64_t>> NotFoundIntervals;
     typedef std::map<uint64_t, std::shared_ptr<BlockItem>> findResult;
-
+    typedef std::map<uint64_t, float> resultCashValues;
 };
 
 #endif // FinderData_H
