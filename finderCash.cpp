@@ -14,19 +14,6 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
     auto lowerInterval = cash.lower_bound(searchRange.first);
     auto endInterval = cash.upper_bound(searchRange.second);
 
-    if((lowerInterval == cash.end())) {
-        auto lowerOffset = cash.begin();
-        if(lowerOffset != cash.end()) {
-            for(auto i=cash.begin(); i!=cash.end(); i++) {
-                if((*i).first <= searchRange.first) {
-                    lowerInterval = i;
-                } else {
-                    break;
-                }
-            }
-        }
-    }
-
     if(lowerInterval != cash.begin()) {
         if((*lowerInterval).first > searchRange.first) {
             lowerInterval--;
