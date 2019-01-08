@@ -16,6 +16,10 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
         auto lowerOffset = cash.begin();
         if(lowerOffset != cash.end()) {
             for(auto i=cash.begin(); i!=cash.end(); i++) {
+                //*********
+                auto testb = (*lowerInterval);
+                //*********
+
                 if((*i).first <= searchRange.first) {
                     lowerInterval = i;
                 } else {
@@ -31,21 +35,27 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
         }
     }
 
+//    //*********
+//    auto testa = (*lowerInterval);
+//    auto testb = (*endInterval);
+//    //*********
+
     if((lowerInterval != cash.end())) {
-        // заносим в notFoundIntervals сколько не нашли слева
+        // заносим  сколько не нашли слева
         if((*lowerInterval).second.get()->timeInterval.first > searchRange.first) {
             notFoundIntervals.push_back(
                         std::pair<uint64_t,uint64_t>(searchRange.first, (*lowerInterval).second.get()->timeInterval.first));
         }
 
         if(endInterval != cash.end()) {
-            // заносим в notFoundIntervals сколько не нашли справа
+            // заносим сколько не нашли справа
             if((*endInterval).second.get()->timeInterval.second > searchRange.second) {
                 notFoundIntervals.push_back(
                             std::pair<uint64_t,uint64_t>((*endInterval).second.get()->timeInterval.second, searchRange.second));
             }
         } else {
             auto lastItem = (++cash.rbegin()).base();
+            auto testYY = (*lastItem);
             if((*lastItem).second.get()->timeInterval.second < searchRange.second) {
                 notFoundIntervals.push_back(
                             std::pair<uint64_t,uint64_t>((*lastItem).second.get()->timeInterval.second, searchRange.second));

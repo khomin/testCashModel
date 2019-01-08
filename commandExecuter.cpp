@@ -22,7 +22,9 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                 } else {
 
                     // иначе читаем из swap
-                    res = finder.getRangeFromSwap(notFoundCash);
+                    auto resAdvanced = finder.getRangeFromSwap(notFoundCash);
+
+                    res.insert(resAdvanced.begin(), resAdvanced.end());
 
                     // обновляем кэш
                     finder.updateCash(res);
