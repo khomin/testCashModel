@@ -13,22 +13,22 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                 auto outStreamRes = commandQueue->front().getOutStreamToResult();
 
                 // читаем из кэша
-                auto res = finder.getRangeFromCash(commandQueue->front().getFindRange());
+                auto resultCash = finder.getRangeFromCash(commandQueue->front().getFindRange());
                 auto notFoundCash = finder.getLastNotFoundIntervalsCash();
 
                 // если сразу все нашли, ок
                 if(notFoundCash.empty()) {
-                    printfResultImediately(outStreamRes, res);
+                    printfResultImediately(outStreamRes, resultCash);
                 } else {
 
                     // иначе читаем из swap
                     auto resAdvanced = finder.getRangeFromSwap(notFoundCash);
 
                     // обновляем кэш
-                    res = finder.mergeResultUpdateCash(res, resAdvanced);
+                    resultCash = finder.mergeResultUpdateCash(resultCash, resAdvanced);
 
                     // выводим
-                    printfResultAfterSwap(outStreamRes, res);
+                    printfResultAfterSwap(outStreamRes, resultCash);
                 }
                 commandQueue->pop();
             }
