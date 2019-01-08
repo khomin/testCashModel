@@ -12,33 +12,50 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
 
     notFoundIntervals.clear();
 
-    if(endInterval == cash.end()) {
-        for(auto tend = cash.rbegin(); tend!=cash.rend(); tend++) {
-            if((*tend).second.get()->timeInterval.second <= searchRange.second) {
-                endInterval = (--tend.base());
-                break;
+    if((lowerInterval == cash.end())) {
+        auto lowerOffset = cash.begin();
+        if(lowerOffset != cash.end()) {
+            for(auto i=cash.begin(); i!=cash.end(); i++) {
+                if((*i).first <= searchRange.first) {
+                    lowerInterval = i;
+                } else {
+                    break;
+                }
             }
         }
     }
 
-    if((lowerInterval != cash.end()) && (endInterval != cash.end())) {
+    if(lowerInterval != cash.begin()) {
+        if((*lowerInterval).first > searchRange.first) {
+            lowerInterval--;
+        }
+    }
+
+    if((lowerInterval != cash.end())) {
         // заносим в notFoundIntervals сколько не нашли слева
         if((*lowerInterval).second.get()->timeInterval.first > searchRange.first) {
             notFoundIntervals.push_back(
                         std::pair<uint64_t,uint64_t>(searchRange.first, (*lowerInterval).second.get()->timeInterval.first));
         }
-        // заносим в notFoundIntervals сколько не нашли справа
-        if((*endInterval).second.get()->timeInterval.first > searchRange.first) {
-            notFoundIntervals.push_back(
-                        std::pair<uint64_t,uint64_t>((*endInterval).second.get()->timeInterval.second, searchRange.second));
-        }
-        // копируем найденное в возврат
-        // если только один элемент найден, инсерт не может вставить с двумя одинаковыми итераторами
-        // вставка по ключу
-        if(lowerInterval == endInterval) {
-            resMap[(*lowerInterval).first] = (*endInterval).second;
+
+        if(endInterval != cash.end()) {
+            // заносим в notFoundIntervals сколько не нашли справа
+            if((*endInterval).second.get()->timeInterval.second > searchRange.second) {
+                notFoundIntervals.push_back(
+                            std::pair<uint64_t,uint64_t>((*endInterval).second.get()->timeInterval.second, searchRange.second));
+            }
         } else {
-            resMap.insert(lowerInterval, endInterval);
+            auto lastItem = (++cash.rbegin()).base();
+            if((*lastItem).second.get()->timeInterval.second < searchRange.second) {
+                notFoundIntervals.push_back(
+                            std::pair<uint64_t,uint64_t>((*lastItem).second.get()->timeInterval.second, searchRange.second));
+            }
+        }
+
+        // вставка по ключу
+        while(lowerInterval != endInterval) {
+            resMap[(*lowerInterval).first] = (*lowerInterval).second;
+            lowerInterval++;
         }
     } else {
         notFoundIntervals.push_back(
