@@ -31,8 +31,9 @@ std::map<uint64_t, std::shared_ptr<BlockItem>> Finder::getFindResult() {
     return findResult;
 }
 
-FinderData::resultCashValues Finder::mergeResultUpdateCash(FinderData::resultCashValues & result,
+FinderData::resultCashValues Finder::mergeResultUpdateCash(const FinderData::resultCashValues & lastResult,
                                                            const FinderData::findResult & update) {
+    auto result = lastResult;
     cash.insertCashValues(update);
     std::for_each(update.begin(), update.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {
         for(auto tvalue: block.second.get()->chrArray) {

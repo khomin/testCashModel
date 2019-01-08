@@ -14,7 +14,7 @@ class Finder {
 public:
     FinderData::resultCashValues getRangeFromCash(const std::pair<uint64_t,uint64_t> & range);
     FinderData::NotFoundIntervals getLastNotFoundIntervalsCash();
-    FinderData::resultCashValues mergeResultUpdateCash(FinderData::resultCashValues & result,
+    FinderData::resultCashValues mergeResultUpdateCash(const FinderData::resultCashValues & lastResult,
                                                        const FinderData::findResult & update);
 
     FinderData::findResult getRangeFromSwap(const FinderData::NotFoundIntervals & intervals);

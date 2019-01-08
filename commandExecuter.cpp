@@ -25,7 +25,7 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
                     auto resAdvanced = finder.getRangeFromSwap(notFoundCash);
 
                     // обновляем кэш
-                    finder.mergeResultUpdateCash(res, resAdvanced);
+                    res = finder.mergeResultUpdateCash(res, resAdvanced);
 
                     // выводим
                     printfResultAfterSwap(outStreamRes, res);
