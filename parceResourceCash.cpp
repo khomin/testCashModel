@@ -29,7 +29,7 @@ bool ParceResourceCash::loadResource(const std::string path,
                 // если значение из искомого диапазона
                 // тогда добавляем в результат
                 for(auto intervals: searchIntervals) {
-                    if((data.first >= intervals.first) && (data.first <= intervals.second)) {
+                    if((data.first >= intervals.first) && (data.first < intervals.second)) {
                         dataToCreateBlocks.push_back(data);
                         break;
                     }
