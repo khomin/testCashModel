@@ -5,10 +5,10 @@
 #include <queue>
 #include <thread>
 #include <mutex>
-#include <blockitem.h>
-#include <finderCash.h>
-#include <finderSwap.h>
-#include "finderData.h"
+#include "include/blockitem.h"
+#include "include/finderCash.h"
+#include "include/finderSwap.h"
+#include "include/finderData.h"
 
 class Finder {
 public:

@@ -5,8 +5,8 @@
 #include <queue>
 #include <thread>
 #include <mutex>
-#include <commandQueueItem.h>
-#include <finder.h>
+#include <include/commandQueueItem.h>
+#include <include/finder.h>
 
 class CommandExecuter {
 public:

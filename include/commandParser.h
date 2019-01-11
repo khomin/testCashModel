@@ -5,8 +5,8 @@
 #include <queue>
 #include <thread>
 #include <mutex>
-#include <commandQueueItem.h>
-#include <commandExecuter.h>
+#include <include/commandQueueItem.h>
+#include <include/commandExecuter.h>
 
 using namespace std;
 

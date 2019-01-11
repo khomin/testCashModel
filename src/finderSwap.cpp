@@ -1,4 +1,4 @@
-#include "finderSwap.h"
+#include "include/finderSwap.h"
 
 FinderData::findResult FinderSwap::findRange(const FinderData::NotFoundIntervals & intervals) {
     // заполняем кэш из файла

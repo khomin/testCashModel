@@ -1,4 +1,4 @@
-#include "commandQueueItem.h"
+#include "include/commandQueueItem.h"
 
 CommandQueueItem::CommandQueueItem () {
     this->isValid = false;

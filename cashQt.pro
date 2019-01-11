@@ -16,15 +16,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    commandParser.cpp \
-    commandExecuter.cpp \
-    commandQueueItem.cpp \
-    finder.cpp \
-    blockitem.cpp \
-    finderCash.cpp \
-    parceResourceCash.cpp \
-    finderSwap.cpp \
-    finderData.cpp
+    src/blockitem.cpp \
+    src/commandExecuter.cpp \
+    src/commandParser.cpp \
+    src/commandQueueItem.cpp \
+    src/finder.cpp \
+    src/finderCash.cpp \
+    src/finderData.cpp \
+    src/finderSwap.cpp \
+    src/parceResourceCash.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -32,12 +32,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    commandParser.h \
-    commandExecuter.h \
-    commandQueueItem.h \
-    finder.h \
-    blockitem.h \
-    finderCash.h \
-    parceResourceCash.h \
-    finderSwap.h \
-    finderData.h
+    include/blockitem.h \
+    include/commandExecuter.h \
+    include/commandParser.h \
+    include/commandQueueItem.h \
+    include/finder.h \
+    include/finderCash.h \
+    include/finderData.h \
+    include/finderSwap.h \
+    include/parceResourceCash.h

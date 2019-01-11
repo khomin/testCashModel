@@ -1,4 +1,4 @@
-#include "finder.h"
+#include "include/finder.h"
 #include <algorithm>
 
 FinderData::resultCashValues Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> & range) {
