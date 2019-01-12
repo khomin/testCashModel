@@ -9,25 +9,25 @@ void CommandExecuter::handler(std::queue<CommandQueueItem>* commandQueue,
 
         if(lock->try_lock()) {
             if(!commandQueue->empty()) {
-                // получаем указатель на поток вывода логов
+                // get pointer to log output stream
                 auto outStreamRes = commandQueue->front().getOutStreamToResult();
 
-                // читаем из кэша
+                // read from the cache
                 auto resultCash = finder.getRangeFromCash(commandQueue->front().getFindRange());
                 auto notFoundCash = finder.getLastNotFoundIntervalsCash();
 
-                // если сразу все нашли, ок
+                // if everyone found it right away, ok
                 if(notFoundCash.empty()) {
                     printfResultImediately(outStreamRes, resultCash);
                 } else {
 
-                    // иначе читаем из swap
+                    // otherwise read from swap
                     auto resAdvanced = finder.getRangeFromSwap(notFoundCash);
 
-                    // обновляем кэш
+                    // cash update
                     resultCash = finder.mergeResultUpdateCash(resultCash, resAdvanced);
 
-                    // выводим
+                    // output
                     printfResultAfterSwap(outStreamRes, resultCash);
                 }
                 commandQueue->pop();

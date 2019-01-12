@@ -4,8 +4,8 @@
 FinderData::resultCashValues Finder::getRangeFromCash(const std::pair<uint64_t,uint64_t> & range) {
     FinderData::resultCashValues res;
     cash.clearLastNotFound();
-    // сдесь берем целые блоки
-    // надо забрать из них только нужные записи
+    // here we take whole blocks
+    // you need to take from them only the necessary entries
     auto findCashResult = cash.findRange(range);
 
     std::for_each(findCashResult.begin(), findCashResult.end(), [&](const std::pair<uint64_t,std::shared_ptr<BlockItem>> block) {

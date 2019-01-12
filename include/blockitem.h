@@ -12,9 +12,9 @@ public:
     BlockItem();
     BlockItem(const BlockItem& b);
     int getItemsCount();
-    std::pair<uint64_t,uint64_t> timeInterval; //Интервал времени
-    std::list<std::pair<uint64_t, float>> chrArray; // Набор архивных значений, выбранных из архива за данный интервал.
-    uint64_t lastUsageTimestamp; // Время последнего обращения к данному блоку данных (может и
+    std::pair<uint64_t,uint64_t> timeInterval; //Time interval
+    std::list<std::pair<uint64_t, float>> chrArray; // The set of archive values selected from the archive for a given interval
+    uint64_t lastUsageTimestamp; // Last access to this data block
 };
 
 #endif // BLOCKITEM_H

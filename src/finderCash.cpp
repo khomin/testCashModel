@@ -21,14 +21,14 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
     }
 
     if((lowerInterval != cash.end())) {
-        // заносим  сколько не нашли слева
+        // we bring how many did not find on the left
         if((*lowerInterval).second.get()->timeInterval.first > searchRange.first) {
             notFoundIntervals.push_back(
                         std::pair<uint64_t,uint64_t>(searchRange.first, (*lowerInterval).second.get()->timeInterval.first));
         }
 
         if(endInterval != cash.end()) {
-            // заносим сколько не нашли справа
+            // we bring how many did not find on the right
             if((*endInterval).second.get()->timeInterval.second > searchRange.second) {
                 notFoundIntervals.push_back(
                             std::pair<uint64_t,uint64_t>((*endInterval).second.get()->timeInterval.second, searchRange.second));
@@ -41,7 +41,7 @@ FinderData::findResult FinderCash::findRange(const std::pair<uint64_t,uint64_t> 
             }
         }
 
-        // вставка по ключу
+        // key insert
         while(lowerInterval != endInterval) {
             resMap[(*lowerInterval).first] = (*lowerInterval).second;
             lowerInterval++;
